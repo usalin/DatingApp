@@ -22,6 +22,7 @@ export class NavComponent implements OnInit {
 
     }, error => {
       console.log('Login failed');
+      console.log(error);
     });
   }
 
@@ -29,7 +30,7 @@ export class NavComponent implements OnInit {
 
     const token = localStorage.getItem('token');
 
-    //if not empty return true
+     // if not empty return true
     return !!token;
 
 

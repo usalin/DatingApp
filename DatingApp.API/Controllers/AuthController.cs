@@ -1,3 +1,4 @@
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -55,6 +56,8 @@ namespace DatingApp.API.Controllers
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
 
+            // throw new Exception("Bla bla bla");
+
             var userFromRepo = await _repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password);
 
             if (userFromRepo == null)
@@ -67,30 +70,29 @@ namespace DatingApp.API.Controllers
 
             new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
             new Claim(ClaimTypes.Name, userFromRepo.Username),
-        };
+           };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
-    
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-        var tokenDescriptor = new SecurityTokenDescriptor {
-            
-        Subject = new ClaimsIdentity(claims),
-        Expires = System.DateTime.Now.AddDays(1),
-        SigningCredentials = creds
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-        };
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
 
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.CreateToken(tokenDescriptor);
+                Subject = new ClaimsIdentity(claims),
+                Expires = System.DateTime.Now.AddDays(1),
+                SigningCredentials = creds
 
-        return Ok( new {
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return Ok(new
+            {
 
                 token = tokenHandler.WriteToken(token)
-        });
-
+            });
         }
-
     }
-
 }
