@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { BsDropdownModule, TabsModule} from 'ngx-bootstrap/';
 import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
+import { TimeagoModule } from 'ngx-timeago';
+
 
 import { RouterModule } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
@@ -56,6 +58,7 @@ export function tokenGetter() {
       HttpClientModule,
       FormsModule,
       ReactiveFormsModule,
+      TimeagoModule.forRoot(),
       BsDropdownModule.forRoot(),
       BsDatepickerModule.forRoot(),
       TabsModule.forRoot(),
