@@ -13,5 +13,7 @@ namespace DatingApp.API.Helpers
 
         public int UserId { get; set; }
         public string MessageContainer { get; set; } = "Unread";
+
+        public int MessageReadId { get; set; }
     }
 }

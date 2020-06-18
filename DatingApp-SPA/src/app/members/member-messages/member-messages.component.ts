@@ -38,7 +38,7 @@ export class MemberMessagesComponent implements OnInit {
               messages[i].recipientId === currentUserId
             ) {
               this.userService.markAsRead(currentUserId, messages[i].id);
-            }
+                        }
           }
         })
       )
@@ -51,7 +51,6 @@ export class MemberMessagesComponent implements OnInit {
         }
       );
   }
-
   sendMessage() {
     this.newMessage.recipientId = this.recipientId;
     this.userService

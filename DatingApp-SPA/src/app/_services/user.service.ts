@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders, HttpParams, JsonpInterceptor } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from '../_models/user';
 import { PaginatedResult } from '../_models/pagination';
 import { map } from 'rxjs/operators';
@@ -13,6 +13,9 @@ import { Message } from '../_models/message';
 })
 export class UserService {
   baseUrl = environment.apiUrl;
+
+  // messageReadID = new BehaviorSubject<number>(100);
+  // currentMessageID = this.messageReadID.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -93,7 +96,7 @@ export class UserService {
     return this.http.post(this.baseUrl + 'users/' + id + '/like/' + recipientId, {});
   }
 
-  getMessages(id: number, page?, itemsPerPage?,  messageContainer?) {
+  getMessages(id: number, page?, itemsPerPage?,  messageContainer?, messageId?: number) {
 
     const paginatedResult: PaginatedResult<Message[]> = new PaginatedResult<Message[]>();
 
@@ -105,6 +108,7 @@ export class UserService {
       params = params.append('pageNumber', page);
       params = params.append('pageSize', itemsPerPage);
     }
+
 
     return this.http.get<Message[]>(this.baseUrl + 'users/' + id + '/messages/', {observe: 'response', params})
       .pipe(
@@ -121,6 +125,7 @@ export class UserService {
 
         })
       );
+
   }
 
     getMessageThread(id: number, recipientId: number ) {
@@ -138,16 +143,14 @@ export class UserService {
       {}
     );
 
+    }
 
-  }
 
-  markAsRead(userId: number, messageId: number) {
-    this.http
+  markAsRead(id: number, userId: number) {
+    return this.http
       .post(
-        this.baseUrl + 'users/' + userId + '/messages/' + messageId + '/read',
+        this.baseUrl + 'users/' + userId + '/messages/' + id + '/read',
         {}
-      )
-      .subscribe();
+      );
   }
-
 }
